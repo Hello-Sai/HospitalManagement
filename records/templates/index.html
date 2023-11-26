@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Excel File Handling Document</title>
+    <style>
+    .upper{
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;}
+      .lower{
+      width:50%
+      }
+        </style>
+{% endblock %}
+{% block body %}
+<div class="upper">
+    <div class="container text-center border border-dark rounded p-2">
+
+    {% if messages %}
+        {% for m in messages %}
+            <h3 class="alert alert-{{m.tags}}">{{m}}</h3>
+        {% endfor %}
+    {% endif %}
+    <form method="post" action="/employee">
+    {% csrf_token %}
+        <h3 >Please Check Your Details by Entering Your Name</h3>
+    <input class="form-control" placeholder="Enter Your name" type="text" name="name" />
+    <button type="submit" class="mt-2 btn btn-primary">Search</button>
+    </form>
+    </div>
+        <form method="post" action="/import" enctype="multipart/form-data" class="text-center">
+            {% csrf_token %}
+            <h4 class="mt-5">Please Upload <i style="color:green"> Excel </i>files only</h4>
+            <button class="btn text-warning"> <input type="file" class="text-success form-control" required name="myfile"></button>
+            <input class="btn btn-success" type="submit">
+        </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
