@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      
+      height: 100vh;
+      margin: 0;
+      display:flex;
+      justify-content: center;
+      background-color: #f5f5f5;
+    }
+
+    .signup-container {
+      width: 400px;
+      background-color: #fff;
+      
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-header {
+      background-color: #4caf50;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    input[type="file"] {
+        display: none;
+      }
+  
+      .custom-upload-btn {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+  
+      .file-name {
+        margin-top: 10px;
+      }
+      .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+  }
+  ul {
+    list-style: none;
+}
+
+  </style>
+</head>
+<body>
+  <ul class="messages">
+  {% for message in messages %}
+  <h1 class="alert alert-{{message.tags}}"><li>{{ message }}</li>
+      <li><a id="close" style="cursor: pointer;">✖</a></li>
+      <li></li>
+      </li><a href="../">↩</a> click to go login</li>
+    </h1>
+  {% endfor %}
+
+  </ul>
+<div class="signup-container">
+  <div class="form-header">
+    <h2>Sign Up</h2>
+  </div>
+
+  <form id="signupForm" method="post"enctype="multipart/form-data"  action="/signup">
+    {% csrf_token %}
+    <div><label for="firstname">First Name:</label>
+    <input type="text" id="firstname" onfocus="dont()" name="firstname" required>
+   
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" name="lastname" required>
+  </div>
+    <div>
+        <label for="profile_picture">Profile Picture </label>
+        <input type="file" required  id="profile_picture"onchange="displayFileName()" accept="image/*" name="profile_picture">
+
+        <label for="profile_picture" class="custom-upload-btn">Upload</label>
+    
+        <div id="fileNameDisplay" class="file-name"></div>
+    </div>
+    <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+    <label for="profile">Profile : </label>
+    <select id="profile" name="profile">
+        <option value="Doctor" selected="selected">Doctor</option>
+        <option value="Patient">Patient</option>
+    </select>
+    </div>
+    <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    </div>
+<div>
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <span id="confirmPasswordError" style="color: red;"></span>
+<div>
+    <label for="address">Address Line:</label>
+    <input type="text" id="address" name="address" required>
+    </div>
+<div>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required>
+    </div>
+<div>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required>
+    </div>
+<div>
+    <label for="pincode">Pincode:</label>
+    <input type="text" id="pincode" name="pincode" required>
+    </div>
+<div>
+    <button type="submit">Sign Up</button>
+    <a href="../"> Go back</a>
+    </div>
+  </form>
+  
+</div>
+
+</body>
+    <script>
+      var passwordField = document.getElementById("password");
+          var confirmPasswordField = document.getElementById("confirmPassword");
+          var confirmPasswordError = document.getElementById("confirmPasswordError");
+
+          confirmPasswordField.addEventListener("input", validateConfirmPassword);
+
+      document.getElementById('firstname').addEventListener('click', function () {
+        // Remove the error messages when focusing on the firstname input
+        var messagesContainer = document.querySelector('.messages');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = '';
+        }
+    });
+    document.getElementById('close').addEventListener('click', function () {
+      // Remove the error messages when focusing on the firstname input
+      var messagesContainer = document.querySelector('.messages');
+      if (messagesContainer) {
+          messagesContainer.innerHTML = '';
+      }
+  });
+        function displayFileName() {
+            const fileInput = document.getElementById('profile_picture');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            console.log(fileInput.files)
+            if (fileInput.files.length > 0) {
+              fileNameDisplay.innerHTML = `Selected File: <b style="margin-bottom:5px">${fileInput.files[0].name}</b>`;
+            } else {
+              fileNameDisplay.textContent = '';
+            }
+          }
+
+
+          
+          function validateConfirmPassword() {
+            var password = passwordField.value;
+            var confirmPassword = confirmPasswordField.value;
+      
+            // Reset previous error message
+            confirmPasswordError.textContent = "";
+      
+            // Check if passwords match
+            if (password !== confirmPassword) {
+              confirmPasswordError.textContent = "Passwords do not match!";
+            }
+          }
+          document.getElementById('signupForm').addEventListener('submit', function (event) {
+            var confirmPassword = document.getElementById('confirmPassword');
+            var address = document.getElementById('address')
+            var city = document.getElementById('city')
+            var state = document.getElementById('state')
+            var pincode = document.getElementById('pincode')
+            address.value = address.value +","+city.value+","+state.value+","+pincode.value;
+            city.remove();
+            state.remove();
+            pincode.remove();
+            confirmPassword.remove();
+            this.submit();
+            event.preventDefault();
+          });
+          
+    </script>
+
+
+</html>
