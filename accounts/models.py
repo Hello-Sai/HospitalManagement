@@ -2,7 +2,9 @@ from collections.abc import Iterable
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 # Create your models here.
-
+    
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username=None, password=None, **extra_fields):
@@ -22,50 +24,36 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
     profile = models.CharField(max_length=10,choices=(('Doctor',"doctor"),('Patient','patient')))
-    profile_picture = models.ImageField()
+    profile_picture = models.ImageField(upload_to="Images/")
     email = models.EmailField(unique=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','password']
     address = models.TextField()
-
+    is_doctor = models.BooleanField(default=False)
     objects = CustomUserManager()
-
-class Doctor(models.Model):
-    profile = models.OneToOneField(User,on_delete=models.CASCADE)
-
-
-class Patient(models.Model):
-    profile = models.OneToOneField(User,on_delete=models.CASCADE)
-    
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 @receiver(post_save,sender=User)
 def create_account(sender,instance=None,created=False,**kwargs):
     if created:
         print(instance.profile)
         if instance.profile=="Doctor":
-            Doctor.objects.create(profile=instance)
+            instance.is_doctor = True
+            instance.save()
             # print("He is doctor")
-        else:
-            Patient.objects.create(profile=instance)
-            # print("He is patient")
 
+
+def user_path(instance,filename):
+    return f"{instance.user.username}_blog/{filename}"
 class Blog(models.Model):
-    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE,related_name="blogs")
-    title = models.CharField(max_length=20)
-    image = models.ImageField(upload_to='blogs/')
-    category =models.CharField(max_length=2,choices=(('MH','Mental Health'), ('HD','Heart Disease'), ('CD','Covid19'), ('IZ','Immunization')))
-    summary = models.TextField()
-    content = models.TextField()
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="blogs")
+    title = models.CharField(max_length=250)
+    image = models.ImageField(upload_to=user_path)
+    category =models.CharField(max_length=15,choices=(('cancer','cancer'), ('diarrhoea','Diarrhoea'),('typhoid','Typhoid'), ('malaria','Malaria'), ))
+    summary = models.TextField(blank=True)
+    content = models.TextField(blank=True)
     is_drafted = models.BooleanField(default=False)
 
     def save(self,*args,**kwargs):
-        
-        
-        words = self.summary.strip().split()[:15]
-        truncated_summary = ' '.join(words)
-        self.summary = truncated_summary
 
         super().save(*args, **kwargs)
         

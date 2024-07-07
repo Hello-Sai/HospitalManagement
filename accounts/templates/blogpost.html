@@ -34,7 +34,7 @@
             align-items: center;
         }
 
-        #saveDraft {
+        #is_drafted {
             margin-right: 10px;
         }
 
@@ -72,14 +72,29 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        ul {
+            list-style: none;
+            position: absolute;
+            top: 0;
+        }
     </style>
+    
+        
 </head>
 <body>
-
+    <ul class="messages">
+        {% if messages %}
+            {% for message in messages %}
+            <li><h1 class="alert alert-{{message.tags}}">{{message}} &nbsp;&nbsp; <a style="cursor: pointer;" id="close">✖</a></h1></li>
+            {% endfor %}
+        {% endif %}
+        </ul>
 
     <!-- blog_post_form.html -->
    <!-- blog_post_form.html -->
-<form method="post" action="{% comment %} Add your server-side URL here {% endcomment %}" enctype="multipart/form-data">
+   <p><a href="{% url 'dashboard' %}">Go Back</a></p>
+
+<form method="post"  enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="container">
@@ -92,7 +107,12 @@
         <input type="file" id="image" name="image" accept="image/*" required>
 
         <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <select class="form-control" id="category" name="category">
+            <option value="malaria" >malaria</option>
+            <option value="typhoid" >typhoid</option>
+            <option value="diarrhoea" >diarrhoea</option>
+            <option value="cancer" selected="selected">cancer</option>
+        </select>
 
         <label for="summary">Summary:</label>
         <textarea id="summary" name="summary" rows="4" required></textarea>
@@ -100,14 +120,22 @@
         <label for="content">Content:</label>
         <textarea id="content" name="content" rows="10" required></textarea>
 
-            <input type="checkbox" id="saveDraft" name="saveDraft">
-            <label for="saveDraft" style="width:100px; margin:auto">Save as Draft</label>
+        <label for="is_drafted" style="width:100px; margin:auto">Save as Draft</label>
+        <input type="checkbox" id="is_drafted" name="is_drafted">
 
         <input type="submit" value="Post Blog">
     </div>
 </form>
 
-
+    <script>
+        document.getElementById('close').addEventListener('click', function () {
+            // Remove the error messages when focusing on the firstname input
+            var messagesContainer = document.querySelector('.messages');
+            if (messagesContainer) {
+                messagesContainer.innerHTML = '';
+            }
+        });
+    </script>
 
 </body>
 </html>

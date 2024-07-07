@@ -91,17 +91,19 @@
   }
   ul {
     list-style: none;
+    position: relative;
+    top: 0;
 }
 
   </style>
 </head>
 <body>
-  <ul class="messages">
+  <ul class="messages" style="margin-right: 50px;">
   {% for message in messages %}
-  <h1 class="alert alert-{{message.tags}}"><li>{{ message }}</li>
-      <li><a id="close" style="cursor: pointer;">✖</a></li>
-      <li></li>
-      </li><a href="../">↩</a> click to go login</li>
+  <h1 class="alert alert-{{message.tags}}"><li>{{ message }}
+      <a id="close" style="cursor: pointer;padding:5px;">✖</a></li>
+      
+      </li align="end" style="margin-left:5px;margin-right:5px;"><a  href="../">↩</a> click to go login</li>
     </h1>
   {% endfor %}
 
@@ -136,10 +138,10 @@
     <input type="email" id="email" name="email" required>
     </div>
     <div>
-    <label for="profile">Profile : </label>
+    <label for="profile">You are  </label>
     <select id="profile" name="profile">
-        <option value="Doctor" selected="selected">Doctor</option>
-        <option value="Patient">Patient</option>
+        <option value="doctor" >Doctor</option>
+        <option value="patient" selected="selected">Patient</option>
     </select>
     </div>
     <div>
@@ -202,7 +204,7 @@
             const fileNameDisplay = document.getElementById('fileNameDisplay');
             console.log(fileInput.files)
             if (fileInput.files.length > 0) {
-              fileNameDisplay.innerHTML = `Selected File: <b style="margin-bottom:5px">${fileInput.files[0].name}</b>`;
+              fileNameDisplay.innerHTML = `<div style="margin:10px 5px">Selected File: <b style="margin-bottom:5px">${fileInput.files[0].name}</b></div>`;
             } else {
               fileNameDisplay.textContent = '';
             }
@@ -234,7 +236,7 @@
             pincode.remove();
             confirmPassword.remove();
             this.submit();
-            event.preventDefault();
+            //event.preventDefault();
           });
           
     </script>

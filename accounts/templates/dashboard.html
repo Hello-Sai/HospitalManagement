@@ -27,32 +27,56 @@
         font-size:25;  
     }
     img{
-        width: 150px;
-        height: 150px;
+        width: 125px;
+        height: 125px;
         position: absolute;
-        right:250;
+        right:0;
         top:0;
-        margin:auto -200    px;
     }
     ul {
         list-style: none;
         position: absolute;
         top: 0;
     }
+   
     </style>
 </head>
 <body>
     <center>
-    <ul class="messages">
-    {% if messages %}
-        {% for message in messages %}
-        <li><h1 class="alert alert-{{message.tags}}">{{message}}<a style="cursor: pointer;" id="close">✖</a></h1></li>
-        {% endfor %}
-    {% endif %}
-    </ul>
-
-    <h2>Hello {{user.username}}{% if user.profile_picture %}<img src="{{user.profile_picture.url}}" />{% endif %} </h2>
-    <h2>your details are</h2>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+        <a class="navbar-brand" href="#">Hello {{user.username}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+              
+              {% if user.is_doctor %}
+              <li class="nav-item" style="padding: 5px;;">
+                <a class="nav-link text-light px-4 btn btn-success" href="{% url 'create_blog' %}">create post</a>
+              </li>
+              {% endif %}
+            <li class="nav-item " style="padding: 5px;" >
+              <a class="nav-link px-4 btn btn-warning text-dark" href="{% url 'posts' %}">posts</a>
+            </li>
+            <li class="nav-item" style="padding: 5px;;">
+              <a class="nav-link px-4 btn btn-info"style="border-radius:5px;margin:0px 10px;color:white;" href="{% url 'logout' %}">logout</a>
+            </li>
+           {% endif %}
+        </div>
+      </nav>
+      <ul style="position:relative;right:0;bottom:0" class="messages">
+        {% if messages %}
+            {% for message in messages %}
+            <li><h1 class="alert alert-{{message.tags}}">{{message}} &nbsp;&nbsp; <a style="cursor: pointer;" id="close">✖</a></h1></li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    <h2>{% if user.profile_picture %}<img src="{{user.profile_picture.url}}" />{% endif %} </h2>
+    <h2>your details </h2>
     <table border="1"> 
     <tr>
         <th>Name</th>
@@ -62,22 +86,16 @@
         <th>Address</th>
         <th></th>
     </tr>
-        <tr><td>{{user.firstname}} {{user.last_name}}</td>
+        <tr>  
+            <td>{{user.first_name}} {{user.last_name}}</td>
             <td>{{user.email}}</td>
-            <td>{{user.profile}}</td>
+            <td>{% if user.is_doctor %} doctor  {% else %} patient {% endif %}</td>
             <td>{{user.username}}</td>
             <td>{{user.address}}</td>
         </tr>
 
     </tr>
     </table>
-
-    <div>
-        <h3>Click Below button  to logout</h3>
-        <form action="/logout">
-        <button class="btn btn-primary" type="submit">logout</button>
-        </form>
-    </div>
 </center>
 </body>
 <script>

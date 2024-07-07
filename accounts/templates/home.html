@@ -92,10 +92,11 @@
   <ul class="messages" style="position: absolute;top:0">
     {% if messages %}
         {% for message in messages %}
-        <h1 class="alert alert-{{message.tags}}">{{message}}<a style="cursor: pointer;" id="close">✖</a></h1>
+        <h1 class="alert alert-{{message.tags}}">{{message}} <a style="cursor: pointer;" id="close">✖</a></h1>
         {% endfor %}
     {% endif %}
     </ul>
+    {% if not user.is_authenticated %}
     <div class="tabs-container">
     <h2 class="label" style="text-align: center;"> Login as </h2>
 
@@ -134,10 +135,12 @@
     </div>
     <b> Don't have an Account  <a href="/signup">Sign Up</a></b>
   </div>
-
-  
 </div>
 </div>
+{% else %}
+  <div >
+    <a href="{% url 'dashboard' %}" style="display:flex;align-items:center;justify-content:center;top:50%;left:50%;">go to dashboard</a></div>
+{% endif %}
 <script>
   function changeTab(tabName) {
     const tabs = document.querySelectorAll('.tab');
