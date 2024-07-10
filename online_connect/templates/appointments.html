@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .revert {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #4285F4;
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        
+        .revert:hover {
+            background-color: #E8F0FE;
+            color: #4285F4;
+            border-color: #4285F4;
+        }
+        
+        
+        .appointment-card {
+            border: 1px solid #d1ecf1;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            background: linear-gradient(to right, #f7fafc, #e3f2fd);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-picture {
+            max-width: 120px;
+            margin-right: 30px;
+        }
+        .appointment-info {
+            flex-grow: 1;
+        }
+        
+        .appointment-date-time h5 {
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+        }
+        .alert {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <ul class="messages">
+        {% if messages %}
+            {% for message in messages %}
+            <li>
+                <h1 class="alert alert-{{message.tags}}">
+                    {{message}}
+                    <a style="cursor: pointer;" id="close">✖</a>
+                </h1>
+            </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+
+    <p><a href="{% url 'dashboard' %}" class="mx-4 revert rounded-pill">Go Back</a></p>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            {% for appointment in appointments %}
+           
+            <div class="col-md-8">
+                <div class="appointment-card">
+                    <span style="left: 0;position:relative;margin-right:20px;" class="">{{forloop.counter}}</span>
+                    {% if user.is_doctor %}
+                    <img src="{{ appointment.patient.profile_picture.url }}" class="profile-picture img-fluid rounded-circle" alt="Profile Picture">
+                    {% else %}
+                    <img src="{{ appointment.doctor.profile_picture.url }}" class="profile-picture img-fluid rounded-circle" alt="Profile Picture">
+                    {% endif %}
+                    <div class="appointment-info">
+                        {% if user.is_doctor %}
+                        <h5>{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h5>
+                        {% else %}
+                        <h5>{{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</h5>
+                        {% endif %}
+                    </div>
+                    <div class="appointment-date-time ">
+                        <h5>{{appointment.date}}</h5>
+                        <h5>{{appointment.time|date:"g:i A" }}</h5>
+
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="appointment-card"><h5>No Appointments Yet.</h5></div>
+            {% endfor %}
+        </div>
+    </div>
+    <script> document.getElementById('close').addEventListener('click', function () {
+        // Remove the error messages when focusing on the firstname input
+        var messagesContainer = document.querySelector('.messages');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = '';
+        }
+    });</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

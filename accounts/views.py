@@ -4,8 +4,10 @@ from django.contrib import messages
 from accounts.models import Blog, User
 from django.contrib.auth import authenticate,login,logout
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from accounts.permissions import is_doctor
+@csrf_exempt
 def home(request):
     if request.method=="POST":
         print(request.POST)
@@ -20,14 +22,17 @@ def home(request):
         else:
             messages.error(request,"Invalid email /password ","danger")
     return render(request,'home.html')
+@csrf_exempt
 @login_required(login_url="/")
 def dashboard(request):
     print(request.user.first_name,request.user.last_name)
     return render(request,'dashboard.html')
+@csrf_exempt
 def Logout(request):
     logout(request)
     messages.success(request,'successfully logged out')
     return redirect('home')
+@csrf_exempt
 def signup(request):
     print(request.POST)
     if request.method=="POST":
@@ -52,7 +57,7 @@ def signup(request):
         except Exception as e:
             messages.error(request,"Got an error -> %s"%e,"danger")
     return render(request,'signup.html')
-
+@csrf_exempt
 @is_doctor
 def create_blog(request):
     
@@ -71,7 +76,7 @@ def create_blog(request):
         request.user.blogs.create(**data)
         return redirect("posts")
     return render(request,'blogpost.html')
-
+@csrf_exempt
 def posts(request):
     posts = Blog.objects.all().filter(is_drafted = False)
     print(posts.order_by('category'),"ordered")

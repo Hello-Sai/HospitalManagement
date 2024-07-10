@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountsConfig'
+
+    'accounts.apps.AccountsConfig',
+    'online_connect'
 ]
 
 MIDDLEWARE = [
@@ -75,24 +77,24 @@ WSGI_APPLICATION = 'HospitalManagement.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-   # I used xampp server and MYSQL database
-   # running at 3306
-    "default":{
-        "ENGINE":"django.db.backends.mysql",
-        "NAME":"hosptialmanagement",
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST':'localhost',
-        'PORT':'3306',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#    # I used xampp server and MYSQL database
+#    # running at 3306
+#     "default":{
+#         "ENGINE":"django.db.backends.mysql",
+#         "NAME":"hosptialmanagement",
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 
 
 
@@ -120,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -140,3 +142,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+REDIRECT_URI = 'http://localhost:8000/connect/callback'

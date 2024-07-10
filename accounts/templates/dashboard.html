@@ -58,7 +58,16 @@
               <li class="nav-item" style="padding: 5px;;">
                 <a class="nav-link text-light px-4 btn btn-success" href="{% url 'create_blog' %}">create post</a>
               </li>
-              {% endif %}
+              {% else %}
+                <li class="nav-item " style="padding: 5px;" >
+                    <a class="nav-link px-4 btn btn-success text-light" href="{% url 'list_of_doctors' %}">Book</a>
+                </li>
+                
+                {% endif %}
+                <li class="nav-item " style="padding: 5px;" >
+                    <a class="nav-link px-4 btn btn-secondary text-light" href="{% url 'appointments' %}">Appointments</a>
+                </li>
+              
             <li class="nav-item " style="padding: 5px;" >
               <a class="nav-link px-4 btn btn-warning text-dark" href="{% url 'posts' %}">posts</a>
             </li>
